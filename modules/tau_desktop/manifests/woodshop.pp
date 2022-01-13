@@ -1,4 +1,6 @@
 class tau_desktop::woodshop {
+  include tau_desktop::fusion
+
   package {
     'Mastercam 2021':
       source => "${tau_desktop::installerdir}/mastercam2021-web.exe",
@@ -14,18 +16,11 @@ class tau_desktop::woodshop {
   }
 
   # Install Mastercam 2021 postprocessors
+  # TODO: Should be an exec'd copy since this slows down runs
   file {
     'C:/Users/Public/Documents/Shared Mastercam 2021/':
       ensure => directory,
       recurse => remote,
       source => "${tau_desktop::installerdir}/mastercam-2021-posts";
-  }
-
-  exec {
-    'install fusion 360':
-      # FIXME: Have to repeat $installerdir here b/c Windows does *not* like
-      # forward slash.
-      command => '"\\\\data-tausd\Shares\Technology\Installers\Fusion 360 Admin Install.exe" --quiet',
-      creates => 'C:/Program Files/Autodesk/webdeploy/production/6a0c9611291d45bb9226980209917c3d/FusionLauncher.exe';
   }
 }

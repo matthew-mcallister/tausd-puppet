@@ -4,9 +4,6 @@ class tau_desktop {
 
   # Classify nodes
   $hn = $trusted['hostname']
-  if $hn =~ /^(th|we)[ld]/ {
-    include tau_desktop
-  }
   if $hn =~ /^thd|^wed/ {
     include tau_desktop::crowdstrike
   }
@@ -15,6 +12,18 @@ class tau_desktop {
   }
   if $hn =~ /^thd021|^thd014/ {
     include tau_desktop::woodshop
+  }
+
+  # This is a hack to work around lack of an ENC
+  $stem_nodes = [
+    'thlstu105816', 'thlstu105638', 'thlstu105803', 'thlstu105688',
+    'thlstu105764', 'thlstu105750', 'thlstu105804', 'thlstu105749',
+    'thlstu104543', 'thlstu104589', 'thlstu104590', 'thlstu104588',
+    'thlstu105661', 'thlstu105419', 'thlstu105418', 'thlstu999888',
+    'thlstu104540', 'thlstu105411', 'thlstu105697', 'thlstu105642',
+  ]
+  if $hn in $stem_nodes {
+    include tau_desktop::stem
   }
 
   package {
@@ -44,6 +53,9 @@ class tau_desktop {
     'Steam':
       ensure => absent;
     'iboss Cloud Desktop App':
+      ensure => absent;
+    'Mastercam 2020':
+      uninstall_options => ['/silent'],
       ensure => absent;
   }
 }
